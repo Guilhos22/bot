@@ -1,0 +1,1 @@
+from .decripto import decripto_pass
