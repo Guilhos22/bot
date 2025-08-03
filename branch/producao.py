@@ -15,7 +15,7 @@ def producao(data_in,cte_list):
     try:
         browser = webdriver.Chrome()
         wait = WebDriverWait(browser, 22)
-        browser.get('https://www.pudim.com.br/') # <- i love this site hahaha (it's example!)
+        browser.get('https://www.pudim.com.br/')
         browser.maximize_window()
         wait.until(EC.element_to_be_clickable((By.ID, "UserName"))).send_keys(email)
         wait.until(EC.element_to_be_clickable((By.ID, "Password"))).send_keys(password)
@@ -24,7 +24,7 @@ def producao(data_in,cte_list):
         wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@value='63d9553fbb611d17f84f7262']"))).click()  
         wait.until(EC.element_to_be_clickable((By.ID, "send-change-company-usr"))).click() 
 
-        sleep(1) #dont know i, but if I do not use sleep, the src fail!!!!
+        sleep(1) #dont know why, but if I do not use sleep, the src fail!!!!
         wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'btn') and contains(@class, 'btn-default') and contains(@class, 'dropdown-toggle')]"))).click() 
         wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@title='Conhecimento de Transporte Eletrônico']"))).click()
         wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Número da Nota']"))).send_keys(Keys.CONTROL, 'v')
@@ -36,7 +36,7 @@ def producao(data_in,cte_list):
         wait.until(EC.element_to_be_clickable((By.ID, "DateEntry"))).send_keys(Keys.BACKSPACE) 
         wait.until(EC.element_to_be_clickable((By.ID, "DateEntry"))).send_keys(data_in)
         wait.until(EC.element_to_be_clickable((By.XPATH,"//button[@data-bb-handler='save']"))).click()
-        # sleep(1)
+        
 
         for i,v in enumerate(cte_list, start=1):
                 pyperclip.copy(v)
@@ -52,7 +52,6 @@ def producao(data_in,cte_list):
                 wait.until(EC.element_to_be_clickable((By.ID, "DateEntry"))).send_keys(Keys.BACKSPACE) 
                 wait.until(EC.element_to_be_clickable((By.ID, "DateEntry"))).send_keys(data_in)
                 wait.until(EC.element_to_be_clickable((By.XPATH,"//button[@data-bb-handler='save']"))).click()
-                # sleep(1.5)
     except WebDriverException as error: 
         if "ERR_INTERNET_DISCONNECTED" in str(error):
             mostrar_erro_popup("Erro de Conexão", "Sem acesso à internet. Verifique sua rede e tente novamente.")

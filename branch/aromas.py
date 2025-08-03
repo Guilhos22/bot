@@ -3,85 +3,78 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
-import pyperclip
+import pyperclip, sys
 from time import sleep
 from login import decripto_pass
 from interface import mostrar_erro_popup
 senha, email = decripto_pass()
 
 def aromas(data_in,cte_list):
-
     
     try:
         browser = webdriver.Chrome()
-        browser.get('https://www.pudim.com.br/') # <- i love this site hahaha (it's example!)
+        wait = WebDriverWait(browser, 22)
+
+        browser.get('https://www.pudim.com.br/')
         browser.maximize_window()
 
-        WebDriverWait(browser,10).until(EC.presence_of_all_elements_located((By.ID, "UserName")))
-        browser.find_element(By.ID, "UserName").send_keys(email)
+        wait.until(EC.element_to_be_clickable((By.ID, "UserName"))).send_keys(email)
+        wait.until(EC.element_to_be_clickable((By.ID, "Password"))).send_keys(senha)
 
-        WebDriverWait(browser,10).until(EC.presence_of_all_elements_located((By.ID, "Password")))
-        browser.find_element(By.ID, "Password").send_keys(senha)
+        wait.until(EC.element_to_be_clickable((By.ID, "login-button"))).click()
+        wait.until(EC.element_to_be_clickable((By.ID, "user-change-context"))).click()
 
-        WebDriverWait(browser,10).until(EC.presence_of_all_elements_located((By.ID, "login-button")))
-        browser.find_element(By.ID, "login-button").click()
-        
-        WebDriverWait(browser,10).until(EC.presence_of_all_elements_located((By.ID, "user-change-context")))
-        browser.find_element(By.ID, "user-change-context").click()
-
-
-
-        WebDriverWait(browser,10).until(EC.presence_of_all_elements_located((By.XPATH, "//input[@value='63d954fabb611d17f84f71f1']"))) #
-        browser.find_element(By.XPATH, "//input[@value='63d954fabb611d17f84f71f1']").click()
-
-        WebDriverWait(browser,10).until(EC.presence_of_all_elements_located((By.ID, "send-change-company-usr")))
-        browser.find_element(By.ID, "send-change-company-usr").click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@value='63d954fabb611d17f84f71f1']"))).click()
+        wait.until(EC.element_to_be_clickable((By.ID, "send-change-company-usr"))).click()
 
 
         sleep(1)
-        # WebDriverWait(browser,10).until(EC.presence_of_all_elements_located((By.XPATH,"//button[contains(@class, 'btn') and contains(@class, 'btn-default') and contains(@class, 'dropdown-toggle')]" ))) this is not working, and i dont know why ;-;
-        browser.find_element(By.XPATH, "//button[contains(@class, 'btn') and contains(@class, 'btn-default') and contains(@class, 'dropdown-toggle')]").click() 
-
-        WebDriverWait(browser, 10).until(EC.presence_of_all_elements_located((By.XPATH, "//*[@title='Conhecimento de Transporte Eletrônico']")))        
-        browser.find_element(By.XPATH, "//*[@title='Conhecimento de Transporte Eletrônico']").click()
-
-        WebDriverWait(browser, 10).until(EC.presence_of_all_elements_located((By.XPATH, "//input[@placeholder='Número da Nota']")))  
-        browser.find_element(By.XPATH, "//input[@placeholder='Número da Nota']").send_keys(Keys.CONTROL, 'v')
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'btn') and contains(@class, 'btn-default') and contains(@class, 'dropdown-toggle')]"))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@title='Conhecimento de Transporte Eletrônico']"))).click()
 
 
-        browser.find_element(By.ID, "searchData").click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Número da Nota']"))).send_keys(Keys.CONTROL, 'v')
+        wait.until(EC.element_to_be_clickable((By.ID, "searchData"))).click()
 
-        WebDriverWait(browser,10).until(EC.presence_of_all_elements_located((By.XPATH, "//i[@class='fa fa-ellipsis-v']")))
-        browser.find_element(By.XPATH, "//i[@class='fa fa-ellipsis-v']").click()
-        browser.find_element(By.XPATH, "//a[@class='lnk-grid edit-cte']").click()
 
-        
-        WebDriverWait(browser,2).until(EC.presence_of_element_located((By.ID, "DateEntry")))
-        browser.find_element(By.ID, "DateEntry").click()
-        browser.find_element(By.ID, "DateEntry").send_keys(Keys.CONTROL, 'a')
-        browser.find_element(By.ID, "DateEntry").send_keys(Keys.BACKSPACE)
-        browser.find_element(By.ID, "DateEntry").send_keys(data_in)
-        browser.find_element(By.XPATH,"//button[@data-bb-handler='save']").click()
-        sleep(1)
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//i[@class='fa fa-ellipsis-v']"))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@class='lnk-grid edit-cte']"))).click()
+
+
+        wait.until(EC.element_to_be_clickable((By.ID, "DateEntry"))).click()
+        wait.until(EC.element_to_be_clickable((By.ID, "DateEntry"))).send_keys(Keys.CONTROL, 'a')
+        wait.until(EC.element_to_be_clickable((By.ID, "DateEntry"))).send_keys(Keys.BACKSPACE)
+        wait.until(EC.element_to_be_clickable((By.ID, "DateEntry"))).send_keys(data_in)
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@data-bb-handler='save']"))).click()
+
 
         for i,v in enumerate(cte_list[1:], start=2):
                 pyperclip.copy(v)
-                WebDriverWait(browser, 10).until(EC.presence_of_all_elements_located((By.XPATH, "//input[@placeholder='Número da Nota']")))  
-                browser.find_element(By.XPATH, "//input[@placeholder='Número da Nota']").send_keys(Keys.CONTROL, 'a')
-                browser.find_element(By.XPATH, "//input[@placeholder='Número da Nota']").send_keys(Keys.BACKSPACE)
-                browser.find_element(By.XPATH, "//input[@placeholder='Número da Nota']").send_keys(Keys.CONTROL, 'v')
-                browser.find_element(By.ID, "searchData").click()
-                WebDriverWait(browser,10).until(EC.presence_of_all_elements_located((By.XPATH, "//i[@class='fa fa-ellipsis-v']")))
-                browser.find_element(By.XPATH, "//i[@class='fa fa-ellipsis-v']").click()
-                browser.find_element(By.XPATH, "//a[@class='lnk-grid edit-cte']").click()
-                WebDriverWait(browser,10).until(EC.presence_of_element_located((By.ID, "DateEntry")))
-                browser.find_element(By.ID, "DateEntry").click()
-                browser.find_element(By.ID, "DateEntry").send_keys(Keys.CONTROL, 'a')
-                browser.find_element(By.ID, "DateEntry").send_keys(Keys.BACKSPACE)
-                browser.find_element(By.ID, "DateEntry").send_keys(data_in)
-                browser.find_element(By.XPATH,"//button[@data-bb-handler='save']").click()
-                sleep(1)
-    except Exception as error:
-         mostrar_erro_popup("Error", f"Algum grave erro aconteceu. Tente novamente mais tarde, ou entre em contato com o Adm: guilherme@guilhoslabs.com.br\n\n{error}")
+                wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Número da Nota']"))).click()
+                wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Número da Nota']"))).send_keys(Keys.CONTROL, 'a')
+                wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Número da Nota']"))).send_keys(Keys.BACKSPACE)
+                wait.until(EC.element_to_be_clickable((By.XPATH,"//input[@placeholder='Número da Nota']" ))).send_keys(Keys.CONTROL, 'v')
+ 
+                wait.until(EC.element_to_be_clickable((By.ID, "searchData"))).click()
+                wait.until(EC.element_to_be_clickable((By.XPATH, "//i[@class='fa fa-ellipsis-v']"))).click()
+                wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@class='lnk-grid edit-cte']"))).click()
 
+                wait.until(EC.element_to_be_clickable((By.ID, "DateEntry"))).click()
+                wait.until(EC.element_to_be_clickable((By.ID, "DateEntry"))).send_keys(Keys.CONTROL, 'a')
+                wait.until(EC.element_to_be_clickable((By.ID, "DateEntry"))).send_keys(Keys.BACKSPACE)
+                wait.until(EC.element_to_be_clickable((By.ID, "DateEntry"))).send_keys(data_in)
+                wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@data-bb-handler='save']"))).click()
+
+    except Exception as error:
+        if "ERR_INTERNET_DISCONNECTED" in str(error):
+            mostrar_erro_popup("Erro de Conexão", "Sem acesso à internet. Verifique sua rede e tente novamente.")
+            sys.exit(1)
+        else:
+            mostrar_erro_popup(
+                "Erro Grave!",
+                "Algum grave erro aconteceu. Tente novamente mais tarde ou entre em contato com o Adm:\n"
+                "guilherme@guilhoslabs.com.br\n\n"
+                f"{error}"
+            )
+            sys.exit(1)
     browser.quit()
