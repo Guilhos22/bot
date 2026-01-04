@@ -18,4 +18,4 @@ def decripto_pass():
         return decripto_senha.decode(), decripto_email.decode()
     
     except Exception as error:
-        mostrar_erro_popup("Error" f"Erro grave ao tentar ler e descriptografar a senha. Por favor, entre em contato com o adm: guilherme@guilhoslabs.com.br\n\n {error}")
+        mostrar_erro_popup("Error" f"Erro grave ao tentar ler e descriptografar a senha. Por favor, entre em contato com o adm: guilherme@guilhoslabs.com.br\n guilherme.oliveira@robertet.com \n {error}")

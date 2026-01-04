@@ -13,8 +13,11 @@ best regards,
 Guilherme Henrique! 
 
 """
-import pyperclip, sys, openpyxl
-from interface import iniciar_interface, mostrar_erro_popup
+import pyperclip
+import sys
+import openpyxl
+from interface import iniciar_interface, mostrar_erro_popup, mostrar_popup
+
 
 def main():
     cte_list = []
@@ -32,19 +35,33 @@ def main():
                     cte_list.append(cte_value)
             if not cte_list:
                 mostrar_erro_popup("Error", f'A filial: "{branch}" selecionada está vazia')
-                import sys
                 sys.exit(1)
             for v in cte_list:      # v == value
                 pyperclip.copy(v)
                     #print(v) debug
         try:
-            excel_file_name = "data_base.xlsx".lower()
+            excel_file_name = "data_base.xlsx".lower().strip()
             excel = openpyxl.load_workbook(excel_file_name)
             sheet_xml = excel[branch]
             excel_list(sheet_xml)
         except FileNotFoundError:
             mostrar_erro_popup("Excel Error", f"Não foi possivel encontrar nenhuma planilha\n\n '{excel_file_name}' ")
-            sys.exit(1)
+            from interface import criar_excel
+            if criar_excel():
+                try:
+                    wb = openpyxl.Workbook()
+                    work_sheet_1 = wb.active
+                    work_sheet_1.title = "aromas"
+                    work_sheet_2 = wb.create_sheet("matriz")
+                    work_sheet_3 = wb.create_sheet("produção")
+                    wb.save(f"{excel_file_name}")
+                    mostrar_popup("OK", "Excel criado com sucesso!")
+                    sys.exit(0)
+                except Exception as error:
+                    mostrar_erro_popup("Error", f"Um erro inesperado aconteceu {error}")
+                    continue
+            else:
+                sys.exit(1)
         except Exception as generic_error:
             mostrar_erro_popup("Excel Error", f"Grave erro. Tente novamente mais tarde ou entre com contato com adm: guilherme@guilhoslabs.com.br\n\n {generic_error} ")
             sys.exit(1)
