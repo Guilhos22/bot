@@ -36,8 +36,8 @@ def main():
             if not cte_list:
                 mostrar_erro_popup("Error", f'A filial: "{branch}" selecionada está vazia')
                 sys.exit(1)
-            for v in cte_list:      # v == value
-                pyperclip.copy(v)
+            #for v in cte_list:      # v == value
+                #pyperclip.copy(v)
                     #print(v) debug
         try:
             excel_file_name = "data_base.xlsx".lower().strip()
@@ -54,8 +54,13 @@ def main():
                     work_sheet_1.title = "aromas"
                     work_sheet_2 = wb.create_sheet("matriz")
                     work_sheet_3 = wb.create_sheet("produção")
+
+                    work_sheet_1['A1'] = "Comece a partir de 'A2'"
+                    work_sheet_2['A1'] = "Comece a partir de 'A2'"
+                    work_sheet_3['A1'] = "Comece a partir de 'A2'"
+
                     wb.save(f"{excel_file_name}")
-                    mostrar_popup("OK", "Excel criado com sucesso!")
+                    mostrar_popup("Sucesso!", "Excel criado com sucesso!\n\n Lembre-se de preencher cada filial")
                     sys.exit(0)
                 except Exception as error:
                     mostrar_erro_popup("Error", f"Um erro inesperado aconteceu {error}")
