@@ -15,7 +15,7 @@ def producao(data_in,cte_list):
     try:
         browser = webdriver.Chrome()
         wait = WebDriverWait(browser, 22)
-        browser.get('https://aquamarine.app.questorpublico.com.br/entrar')
+        browser.get('https://www.pudim.com.br/') #example
         browser.maximize_window()
         wait.until(EC.element_to_be_clickable((By.ID, "UserName"))).send_keys(email)
         wait.until(EC.element_to_be_clickable((By.ID, "Password"))).send_keys(password)
