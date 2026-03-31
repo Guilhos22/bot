@@ -13,11 +13,10 @@ best regards,
 Guilherme Henrique! 
 
 """
-import pyperclip
+import datetime
 import sys
 import openpyxl
 from interface import iniciar_interface, mostrar_erro_popup, mostrar_popup
-
 
 def main():
     cte_list = []
@@ -26,10 +25,20 @@ def main():
 
         if not branch or not data_in:
             sys.exit(0)
+        
+        today = datetime.date.today()
+        data_in_dt = datetime.datetime.strptime(data_in, "%d/%m/%Y").date()
+
+        if data_in_dt > today:
+            mostrar_erro_popup("ERROR", f"Data de lançamento não pode ser maior que a data de hoje ({today.strftime('%d/%m/%Y')})")
+            sys.exit(1)
+        
 
         def excel_list(sheet):
             cte_list.clear()
             for cte in sheet.iter_rows(min_row=2):
+                if cte[0].value is None:
+                    continue
                 cte_value = str(cte[0].value).strip()
                 if cte_value:
                     cte_list.append(cte_value)
@@ -51,16 +60,12 @@ def main():
                 try:
                     wb = openpyxl.Workbook()
                     work_sheet_1 = wb.active
-                    work_sheet_1.title = "aromas"
-                    work_sheet_2 = wb.create_sheet("matriz")
-                    work_sheet_3 = wb.create_sheet("produção")
+                    work_sheet_1.title = "produção"
 
                     work_sheet_1['A1'] = "Comece a partir de 'A2'"
-                    work_sheet_2['A1'] = "Comece a partir de 'A2'"
-                    work_sheet_3['A1'] = "Comece a partir de 'A2'"
 
                     wb.save(f"{excel_file_name}")
-                    mostrar_popup("Sucesso!", "Excel criado com sucesso!\n\n Lembre-se de preencher cada filial")
+                    mostrar_popup("Sucesso!", "Excel criado com sucesso!\n\n Lembre-se de preencher a filial")
                     sys.exit(0)
                 except Exception as error:
                     mostrar_erro_popup("Error", f"Um erro inesperado aconteceu {error}")
@@ -71,21 +76,14 @@ def main():
             mostrar_erro_popup("Excel Error", f"Grave erro. Tente novamente mais tarde ou entre com contato com adm: guilherme@guilhoslabs.com.br\n\n {generic_error} ")
             sys.exit(1)
 
-        if branch == "matriz":
-            from branch import fragrance
-            fragrance(data_in,cte_list)
 
-        elif branch == "aromas":
-            from branch import aromas
-            aromas(data_in,cte_list)
-
-        elif branch == "produção":
+        if branch  == "produção":
             from branch import producao
             producao(data_in,cte_list)
 
         from interface import continuar
         if not continuar(): 
-            sys.exit(0) # closing program without no error 
+            sys.exit(0) 
 
 if __name__ == "__main__":
     main()

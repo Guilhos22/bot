@@ -1,21 +1,36 @@
-from cryptography.fernet import Fernet
+import keyring
+import sys
 from interface import mostrar_erro_popup
-import os
+
+_SERVICE = "AquamarineBot"
+
+
 
 def decripto_pass():
     try:
-        base_dir = os.path.dirname(__file__) 
-        key_path = os.path.join(base_dir, "your.key") 
 
-        with open(key_path, 'rb') as arq:
-            key = arq.read()
-        fernet = Fernet(key)
-        pass_cripto = b"cripto_password" # <- example
-        mail_cripto = b'cripto_mail' # <- example
-        decripto_senha = fernet.decrypt(pass_cripto)
-        decripto_email = fernet.decrypt(mail_cripto)
-        
-        return decripto_senha.decode(), decripto_email.decode()
-    
+        if isinstance(keyring.get_keyring(), keyring.backends.fail.Keyring):
+            raise RuntimeError("Backend de cofre de senhas inseguro ou inexistente no SO.")
+
+        senha = keyring.get_password(_SERVICE, "password")
+        email = keyring.get_password(_SERVICE, "email")
+
+        if not senha or not email:
+            from interface import solicitar_credenciais
+            salvo = solicitar_credenciais()
+            if not salvo:
+                sys.exit(0)
+
+            senha = keyring.get_password(_SERVICE, "password")
+            email = keyring.get_password(_SERVICE, "email")
+            
+        return senha, email
+
     except Exception as error:
-        mostrar_erro_popup("Error" f"Erro grave ao tentar ler e descriptografar a senha. Por favor, entre em contato com o adm: guilherme@guilhoslabs.com.br\n guilherme.oliveira@robertet.com \n {error}")
+
+        mostrar_erro_popup("Erro de Segurança", "Falha na integridade do cofre de credenciais. Acesso negado.")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    decripto_pass()

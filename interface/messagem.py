@@ -13,10 +13,12 @@ def mostrar_popup(titulo, msg):
     messagebox.showinfo(titulo, msg)
     root.destroy()
 
-
-
 def continuar():
-    return messagebox.askyesno("Reiniciar", "Deseja processar outro lote de CTE's?")
+    root = Tk()
+    root.withdraw()
+    result = messagebox.askyesno("Reiniciar", "Deseja processar outro lote de CTE's?")
+    root.destroy()
+    return result
 
 def criar_excel():
     return messagebox.askyesno("CRIAR", "Deseja criar uma nova planilha?")
