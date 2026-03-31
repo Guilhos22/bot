@@ -36,9 +36,20 @@ Obs: a compatibilidade com sistemas Unix-like ainda será implementada no futuro
     Após análise, a maioria dos AVs reconhece o arquivo como legítimo.
     Bugs e falhas podem ocorrer. Em caso de erro grave, a própria aplicação mostra o contato do administrador. Para melhorias, há um link na interface gráfica que leva ao GitHub deste projeto.
 
+### 3. Compilação do src para binário (.EXE):
+
+```bash
+git clone https://github.com/Guilhos22/bot/;cd .\bot\;python -m venv bot_venv; .\bot_venv\Scripts\activate; pip install -r .\requirements.txt; pip-review --auto;pyinstaller.exe --noconsole --icon=imagem/logo.ico --collect-all selenium .\main.py
+```
+
+### OBS: SE ATENTAR PARA TROCAR O URL EM PRODUCAO!
 
 📬 Contribuições
 Mesmo que eu não esteja mais na empresa futuramente, o código continuará open-source para quem herdar a função ou quiser contribuir com melhorias.
+
+
+
+
 
 ###############################
 
