@@ -17,7 +17,7 @@ def producao(data_in, cte_list):
     try:
         browser = webdriver.Chrome()
         wait = WebDriverWait(browser, 22)
-        browser.get('https://guilhoslabs.com.br') # <- visit then haha 
+        browser.get('https://guilhoslabs.com.br/') # <- visit haha 
         browser.maximize_window()
         password, email = decripto_pass()
         wait.until(EC.element_to_be_clickable((By.ID, "UserName"))).send_keys(email)
@@ -37,7 +37,8 @@ def producao(data_in, cte_list):
         pyperclip.copy(cte_list[0])
         wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Número da Nota']"))).send_keys(
             Keys.CONTROL, 'v')
-        wait.until(EC.element_to_be_clickable((By.ID, "searchData"))).click()
+        search_btn = wait.until(EC.element_to_be_clickable((By.ID, "searchData")))
+        browser.execute_script("arguments[0].click();", search_btn)
         wait.until(EC.element_to_be_clickable((By.XPATH, "//i[@class='fa fa-ellipsis-v']"))).click()
         wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@class='lnk-grid edit-cte']"))).click()
         wait.until(EC.element_to_be_clickable((By.ID, "DateEntry"))).click()
@@ -55,7 +56,8 @@ def producao(data_in, cte_list):
                 Keys.BACKSPACE)
             wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Número da Nota']"))).send_keys(
                 Keys.CONTROL, 'v')
-            browser.find_element(By.ID, "searchData").click()
+            search_btn = wait.until(EC.element_to_be_clickable((By.ID, "searchData")))
+            browser.execute_script("arguments[0].click();", search_btn)
             wait.until(EC.element_to_be_clickable((By.XPATH, "//i[@class='fa fa-ellipsis-v']"))).click()
             wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@class='lnk-grid edit-cte']"))).click()
             wait.until(EC.element_to_be_clickable((By.ID, "DateEntry"))).click()
@@ -63,7 +65,8 @@ def producao(data_in, cte_list):
             wait.until(EC.element_to_be_clickable((By.ID, "DateEntry"))).send_keys(Keys.BACKSPACE)
             wait.until(EC.element_to_be_clickable((By.ID, "DateEntry"))).send_keys(data_in)
             wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@data-bb-handler='save']"))).click()
-
+            
+        sleep(2)
 
 
 
@@ -80,5 +83,6 @@ def producao(data_in, cte_list):
             )
             sys.exit(1)
     finally:
+        
         if browser:
             browser.quit()
