@@ -17,11 +17,12 @@ import datetime
 import sys
 import openpyxl
 from interface import iniciar_interface, mostrar_erro_popup, mostrar_popup
+from branch import prod
 
 def main():
     cte_list = []
     while True: 
-        branch, data_in = iniciar_interface()
+        branch, data_in, headless = iniciar_interface()
 
         if not branch or not data_in:
             sys.exit(0)
@@ -78,8 +79,7 @@ def main():
 
 
         if branch  == "produção":
-            from branch import producao
-            producao(data_in,cte_list)
+            prod(data_in,cte_list, headless=headless)
 
         from interface import continuar
         if not continuar(): 

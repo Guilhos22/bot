@@ -2,12 +2,24 @@ from tkinter import *
 from tkinter import messagebox
 from tkcalendar import Calendar
 import os, socket, webbrowser, keyring
-
+user_os = os.name
 user = os.getlogin()
 local_hostname = socket.gethostname()
 local_ip = socket.gethostbyname(local_hostname)
 
+
 _SERVICE = "AquamarineBot"
+
+
+def get_local_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("8.8.8.8", 80))  # não envia nada, só resolve rota
+        return s.getsockname()[0]
+    except Exception:
+        return "127.0.0.1"  # fallback se não tiver rota
+    finally:
+        s.close()
 
 
 def solicitar_credenciais(modo="primeiro_login", parent=None):
@@ -113,6 +125,7 @@ def iniciar_interface():
             return
         resultado['branch'] = branch
         resultado['data'] = data
+        resultado['headless'] = var_headless.get()
         janela.destroy()
 
     def link(event):
@@ -146,14 +159,20 @@ def iniciar_interface():
         fg="blue", cursor="hand2"
     )
     btn_credenciais.pack(pady=4)
-
-    texto_design = Label(janela, text=f'{user} - {local_ip}')
+    if user_os == 'posix':
+        texto_design = Label(janela, text=f'{user} - {get_local_ip()}')
+    else:
+        texto_design = Label(janela, text=f'{user} - {local_ip}')
     texto_design.pack(pady=10)
 
     link_github = Label(janela, text="Visite este codigo em meu github!", fg="blue", cursor="hand2", font=('Arial', 10, 'underline'))
     link_github.pack()
     link_github.bind("<Button-1>", link)
 
+    var_headless = BooleanVar(janela, value=False) # new
+    chk_headless = Checkbutton(janela, text="Executar em segundo plano (headless)", variable=var_headless)# new
+    chk_headless.pack(pady=8)# new
+
     janela.mainloop()
 
-    return resultado.get('branch'), resultado.get('data')
+    return resultado.get('branch'), resultado.get('data'), resultado.get('headless', False)
